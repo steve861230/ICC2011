@@ -1,0 +1,282 @@
+module LCD_CTRL(clk, reset, IROM_Q, cmd, cmd_valid, IROM_EN, IROM_A, IRB_RW, IRB_D, IRB_A, busy, done);
+input clk;
+input reset;
+input [7:0] IROM_Q;
+input [2:0] cmd;
+input cmd_valid;
+output reg IROM_EN;
+output reg [5:0] IROM_A;
+output reg IRB_RW;
+output [7:0] IRB_D;
+output [5:0] IRB_A;
+output reg busy;
+output reg done;
+reg [5:0] pointer;
+reg [7:0] register [63:0];
+reg [5:0] counter;
+reg[1:0] state, next_state;
+integer i ;
+parameter  write = 2'b10 , 
+                  work =2'b01,
+                  finish = 2'b11,
+                  read = 2'b00;
+
+parameter    shift_up = 3'b001,
+                    shift_down =3'b010,
+                    shift_left=3'b011,
+                    shift_right =3'b100,
+                    average =3'b101,
+                    mirror_x =3'b110,
+                    mirror_y =3'b111;
+                    
+assign IRB_A=counter;
+assign IRB_D=register[counter];
+
+
+always@(posedge clk or posedge reset)
+begin
+  if(reset)
+    state=read;
+  else 
+    state=next_state;
+end                   
+
+always@(posedge clk or posedge reset)
+begin
+  counter<=IROM_A;
+end  
+
+always@(posedge clk or posedge reset)
+begin
+if(reset)
+  IROM_A<=0;
+else
+  begin
+    case(state)
+      
+      read:
+      begin
+      if(IROM_A!=63)
+        IROM_A<= IROM_A+1;
+      else
+        IROM_A<=63;
+      end
+      work:
+        IROM_A<=0;
+      finish:
+        IROM_A<=0;
+      write:
+      begin
+      if(busy==0)
+        IROM_A<=0;
+      else
+        begin
+          if(IROM_A!=63)
+            IROM_A<= IROM_A+1;
+          else
+            IROM_A<=63;
+        end
+      
+    end
+    endcase
+    end
+end
+
+
+ always@(posedge clk or posedge reset)
+begin
+  case(state)
+    read:
+    begin
+    if(counter==63)
+      IROM_EN<=1;
+    else
+      IROM_EN<=0;
+    end
+    work:
+    IROM_EN<=1;
+    write:
+    IROM_EN<=1;
+    finish:
+    IROM_EN<=1;
+  endcase
+end
+
+always@(posedge clk or posedge reset)
+begin
+  case(state)
+  work: done=0;
+  write: done=0;
+  read: done=0;
+  finish: done=1;
+  endcase
+end
+
+always@(posedge clk or posedge reset)
+begin
+  case(state)
+  work: IRB_RW=1;
+  write: IRB_RW=0;
+  read: IRB_RW=1;
+  finish: IRB_RW=1;
+  endcase
+end
+
+
+
+always@(posedge clk)
+begin
+
+  case (state)
+    read:
+    begin
+      pointer<=28;
+    end
+    work:
+    case(cmd)
+    shift_up:
+    begin
+        if(pointer!=1 && pointer!=2 &&pointer!=3 &&pointer!=4 &&pointer!=5 &&pointer!=6 &&pointer!=7)
+        pointer<=pointer-8;
+    end
+    shift_down :
+    begin  
+        if(pointer!=49 && pointer!=50 &&pointer!=51 &&pointer!=52 &&pointer!=53 &&pointer!=54 &&pointer!=55)
+        pointer<=pointer+8;
+    end
+    shift_left :
+    begin
+        if(pointer!=1 && pointer!=9 &&pointer!=17 &&pointer!=25 &&pointer!=33 &&pointer!=41 &&pointer!=49)
+          pointer<=pointer-1;
+    end
+    shift_right:
+    begin
+        if(pointer!=7 && pointer!=15 &&pointer!=23 &&pointer!=31 &&pointer!=39 &&pointer!=47 &&pointer!=55)
+          pointer<=pointer+1;
+    end 
+    reset_xy:
+        pointer<=28; 
+        
+        default : ;
+    endcase
+        
+    work: 
+    begin
+      pointer<=28;
+    end
+    
+    finish:
+    begin
+      pointer<=28;
+    end
+    
+  endcase    
+end
+
+always@(posedge clk)   
+begin
+if(~IROM_EN)  
+    begin
+    register[counter]<=IROM_Q;
+    end
+  else
+    begin
+  case (state)
+    read: 
+    if(reset)
+    begin
+    for(i=0;i<64;i=i+1)
+    register[i] <=0;
+    end
+    
+    work:
+    begin
+    case(cmd)
+    average:
+    begin
+    register[(pointer-1)]  <= ((register[pointer-1]+register[pointer]+register[pointer+7]+register[pointer+8]+1)/4);
+    register[(pointer)]  <= ((register[pointer-1]+register[pointer]+register[pointer+7]+register[pointer+8]+1)/4);
+    register[(pointer+7)]<= ((register[pointer-1]+register[pointer]+register[pointer+7]+register[pointer+8]+1)/4);
+    register[(pointer+8)]<= ((register[pointer-1]+register[pointer]+register[pointer+7]+register[pointer+8]+1)/4);
+    end
+  
+  mirror_x:
+  begin
+    register[pointer+-1]<=register[pointer+7];
+    register[pointer+7]<=register[pointer-1];
+
+    register[pointer]<=register[pointer+8];
+    register[pointer+8]<=register[pointer];
+  end
+  
+  mirror_y:
+  begin
+    register[pointer-1]<=register[pointer];
+    register[pointer]<=register[pointer-1];
+   
+    register[pointer+7]<=register[pointer+8];
+    register[pointer+8]<=register[pointer+7];
+
+  end
+      endcase
+      
+    end
+   endcase 
+end
+end
+    
+always@(posedge clk or posedge reset) 
+begin
+  if(reset)
+    busy=1;
+    
+  case(state)
+  write:
+  busy<=1;
+  work:
+  busy<=0;
+  read:
+    busy<=1;
+  finish:
+  busy<=0;
+  endcase
+
+end  
+    
+always@(*) 
+begin
+  case(state)
+    write : 
+    begin
+      if(counter==63)
+        next_state=finish;
+      else
+        next_state=write;
+    end
+    work :
+    begin 
+      if(cmd_valid==1)
+      begin
+        if(cmd==4'b0000)
+          next_state=write;
+        else
+          next_state=work;
+        end
+      else
+        next_state=work;
+    end
+    read : 
+    begin
+    if(counter==63)
+        next_state=work;
+      else 
+        next_state=read;
+      end
+     finish:
+     next_state=finish;
+      default :next_state=read;
+    endcase
+end
+
+endmodule
+

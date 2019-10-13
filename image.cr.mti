@@ -1,0 +1,35 @@
+C:/Users/USER/Desktop/ICC2011/testfixture.v {0 {vlog -work work -vopt C:/Users/USER/Desktop/ICC2011/testfixture.v
+Model Technology ModelSim SE-64 vlog 10.1c Compiler 2012.07 Jul 27 2012
+-- Compiling module IRB
+-- Compiling module IROM
+-- Compiling module irom
+** Error: IROM.v(153): (vlog-2163) Macro `IMAGE is undefined.
+
+-- Compiling module test
+** Error: C:/Users/USER/Desktop/ICC2011/testfixture.v(66): (vlog-2163) Macro `CMD is undefined.
+
+** Error: C:/Users/USER/Desktop/ICC2011/testfixture.v(67): (vlog-2163) Macro `EXPECT is undefined.
+
+
+} {6.0 7.0 9.0 10.0 11.0 12.0} {}} C:/Users/USER/Desktop/ICC2011/lcd_ctrl.v {1 {vlog -work work -vopt {C:\Users\USER\Desktop\ICC2011\lcd_ctrl.v}
+Model Technology ModelSim SE-64 vlog 10.1c Compiler 2012.07 Jul 27 2012
+-- Compiling module LCD_CTRL
+
+Top level modules:
+	LCD_CTRL
+
+} {} {}} C:/Users/USER/Desktop/ICC2011/IROM.v {0 {vlog -work work -vopt C:/Users/USER/Desktop/ICC2011/IROM.v
+Model Technology ModelSim SE-64 vlog 10.1c Compiler 2012.07 Jul 27 2012
+-- Compiling module IROM
+-- Compiling module irom
+** Error: C:/Users/USER/Desktop/ICC2011/IROM.v(153): (vlog-2163) Macro `IMAGE is undefined.
+
+
+} {5.0 6.0} {}} C:/Users/USER/Desktop/ICC2011/IRB.v {1 {vlog -work work -vopt C:/Users/USER/Desktop/ICC2011/IRB.v
+Model Technology ModelSim SE-64 vlog 10.1c Compiler 2012.07 Jul 27 2012
+-- Compiling module IRB
+
+Top level modules:
+	IRB
+
+} {} {}}

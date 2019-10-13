@@ -1,0 +1,114 @@
+m255
+K3
+13
+cModel Technology
+Z0 dC:\Users\USER\Desktop\posim
+T_opt
+VZ;9?89oEi7DZ6o9Eo<g8S2
+04 4 4 work test fast 0
+=1-a81e8488427d-5c2523db-38c-14ff0
+o-quiet -auto_acc_if_foreign -work work
+n@_opt
+OL;O;10.1c;51
+Z1 dC:\Users\USER\Desktop\posim
+vIRB
+V7a__=mQ6gUGEX59k7?oWD2
+r1
+!s85 0
+31
+IX3EPN[k[=K@BR@df36``G0
+Z2 dC:\Users\USER\Desktop\ICC2011
+Z3 w1300763962
+FIRB.v
+Z4 8testfixture.v
+Z5 Ftestfixture.v
+L0 56
+Z6 OL;L;10.1c;51
+Z7 !s108 1545938030.804000
+Z8 !s107 IROM.v|IRB.v|lcd_ctrl.v|testfixture.v|
+Z9 !s90 -reportprogress|300|testfixture.v|lcd_ctrl.v|+define+tb1|
+Z10 o-L mtiAvm -L mtiOvm -L mtiUvm -L mtiUPF
+Z11 !s92 +define+tb1 -L mtiAvm -L mtiOvm -L mtiUvm -L mtiUPF
+n@i@r@b
+!s100 z:kLlCno:FQN8;_;T41EI2
+!i10b 1
+virom
+VQ4KWLIYXPHSC^eT7iHaEO1
+r1
+31
+I9QcbmW4_W:?[0mE2l@A5A2
+R2
+R3
+Z12 FIROM.v
+R4
+R5
+L0 87
+R6
+R7
+R8
+R9
+R10
+R11
+!s85 0
+!s100 eWJ5C`a>4I7okI]LD8WLe1
+!i10b 1
+vIROM
+VPP@4>3=4CmDKHn4KDYOln2
+r1
+31
+I5]6m2J=ePF^PFIYZATWSa2
+R2
+R3
+R12
+R4
+R5
+L0 68
+R6
+R7
+R8
+R9
+R10
+R11
+n@i@r@o@m
+!s85 0
+!s100 dFZWZLK4dM9cQAUTdfJ530
+!i10b 1
+vLCD_CTRL
+VDENaz:1j^dnV_f2V9U9LG1
+r1
+31
+Ij84L8X7acFIg?j?;c`bbi2
+R2
+w1545842652
+8lcd_ctrl.v
+Flcd_ctrl.v
+L0 1
+R6
+R7
+R8
+R9
+R10
+R11
+n@l@c@d_@c@t@r@l
+!s85 0
+!s100 NO46;e>MFNk0@G9eTVC8Z1
+!i10b 1
+vtest
+VQ:0YoCTco[@:Ue3TQ770l0
+r1
+31
+I[HzF2F?7T3RcC1<H[68HB3
+R2
+R3
+R4
+R5
+L0 20
+R6
+R7
+R8
+R9
+R10
+R11
+!s85 0
+!s100 <jo1?kI><Z9MFf]d`K::X3
+!i10b 1
